@@ -78,6 +78,7 @@ export * from './notValue/index.ts';
 export * from './notValues/index.ts';
 export * from './notWords/index.ts';
 export * from './octal/index.ts';
+export * from './parseBoolean/index.ts';
 export * from './parseJson/index.ts';
 export * from './partialCheck/index.ts';
 export * from './rawCheck/index.ts';
