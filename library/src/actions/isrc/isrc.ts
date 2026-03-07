@@ -65,6 +65,8 @@ export interface IsrcAction<
  * - CC-XXX-YY-NNNNN
  *
  * @returns An ISRC action.
+ *
+ * @beta
  */
 export function isrc<TInput extends string>(): IsrcAction<TInput, undefined>;
 
@@ -74,6 +76,8 @@ export function isrc<TInput extends string>(): IsrcAction<TInput, undefined>;
  * @param message The error message.
  *
  * @returns An ISRC action.
+ *
+ * @beta
  */
 export function isrc<
   TInput extends string,
