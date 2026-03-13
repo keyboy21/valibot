@@ -7,14 +7,14 @@ import type {
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 import { _LruCache } from './_LruCache.ts';
-import type { Cache2, CacheConfig2 } from './types.ts';
+import type { Cache, CacheConfig } from './types.ts';
 
 /**
- * Schema with cache2 type.
+ * Schema with cache type.
  */
-export type SchemaWithCache2<
+export type SchemaWithCache<
   TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TCacheConfig extends CacheConfig2 | undefined,
+  TCacheConfig extends CacheConfig | undefined,
 > = TSchema & {
   /**
    * The cache config.
@@ -23,7 +23,7 @@ export type SchemaWithCache2<
   /**
    * The cache instance.
    */
-  readonly cache: Cache2<
+  readonly cache: Cache<
     OutputDataset<InferOutput<TSchema>, InferIssue<TSchema>>
   >;
 };
@@ -35,9 +35,9 @@ export type SchemaWithCache2<
  *
  * @returns The cached schema.
  */
-export function cache2<
+export function cache<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
->(schema: TSchema): SchemaWithCache2<TSchema, undefined>;
+>(schema: TSchema): SchemaWithCache<TSchema, undefined>;
 
 /**
  * Caches the output of a schema.
@@ -47,21 +47,21 @@ export function cache2<
  *
  * @returns The cached schema.
  */
-export function cache2<
+export function cache<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  const TCacheConfig extends CacheConfig2 | undefined,
+  const TCacheConfig extends CacheConfig | undefined,
 >(
   schema: TSchema,
   config: TCacheConfig
-): SchemaWithCache2<TSchema, TCacheConfig>;
+): SchemaWithCache<TSchema, TCacheConfig>;
 
 // @__NO_SIDE_EFFECTS__
-export function cache2(
+export function cache(
   schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  config?: CacheConfig2
-): SchemaWithCache2<
+  config?: CacheConfig
+): SchemaWithCache<
   BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  CacheConfig2 | undefined
+  CacheConfig | undefined
 > {
   return {
     ...schema,

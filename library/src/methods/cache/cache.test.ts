@@ -1,12 +1,12 @@
 import { afterAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import { string } from '../../schemas/index.ts';
-import { cache2 } from './cache2.ts';
+import { cache } from './cache.ts';
 
-describe('cache2', () => {
+describe('cache', () => {
   test('should cache output', () => {
     const baseSchema = string();
     const runSpy = vi.spyOn(baseSchema, '~run');
-    const schema = cache2(baseSchema);
+    const schema = cache(baseSchema);
     expect(schema['~run']({ value: 'foo' }, {})).toBe(
       schema['~run']({ value: 'foo' }, {})
     );
@@ -14,7 +14,7 @@ describe('cache2', () => {
   });
 
   test('should allow custom max size', () => {
-    const schema = cache2(string(), { maxSize: 2 });
+    const schema = cache(string(), { maxSize: 2 });
     expect(schema.cacheConfig.maxSize).toBe(2);
 
     const fooDataset = schema['~run']({ value: 'foo' }, {});
@@ -40,7 +40,7 @@ describe('cache2', () => {
     });
 
     test('and clear expired values', () => {
-      const schema = cache2(string(), { maxAge: 1000 });
+      const schema = cache(string(), { maxAge: 1000 });
 
       const fooDataset = schema['~run']({ value: 'foo' }, {});
       expect(schema['~run']({ value: 'foo' }, {})).toBe(fooDataset);
@@ -49,7 +49,7 @@ describe('cache2', () => {
     });
 
     test('and not reset expiry on get', () => {
-      const schema = cache2(string(), { maxAge: 1000 });
+      const schema = cache(string(), { maxAge: 1000 });
       const fooDataset = schema['~run']({ value: 'foo' }, {});
       expect(schema['~run']({ value: 'foo' }, {})).toBe(fooDataset);
       vi.advanceTimersByTime(500);
@@ -60,7 +60,7 @@ describe('cache2', () => {
   });
 
   test('should expose cache for manual clearing', () => {
-    const schema = cache2(string());
+    const schema = cache(string());
     const fooDataset = schema['~run']({ value: 'foo' }, {});
     expect(schema['~run']({ value: 'foo' }, {})).toBe(fooDataset);
     schema.cache.clear();

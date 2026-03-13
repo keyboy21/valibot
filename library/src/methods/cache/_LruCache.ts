@@ -1,9 +1,9 @@
-import type { Cache2, CacheConfig2 } from './types.ts';
+import type { Cache, CacheConfig } from './types.ts';
 
 /**
  * Efficient LRU cache using Map iteration order.
  */
-class _LruCache<TValue> implements Cache2<TValue> {
+class _LruCache<TValue> implements Cache<TValue> {
   // Stores [value, timestamp] tuples to avoid object allocation overhead
   private readonly store = new Map<unknown, [TValue, number]>();
 
@@ -12,7 +12,7 @@ class _LruCache<TValue> implements Cache2<TValue> {
   private readonly maxAge: number;
   private readonly hasMaxAge: boolean;
 
-  constructor(config?: CacheConfig2) {
+  constructor(config?: CacheConfig) {
     this.maxSize = config?.maxSize ?? 1000;
     this.maxAge = config?.maxAge ?? Infinity;
     this.hasMaxAge = isFinite(this.maxAge);

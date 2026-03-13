@@ -1,12 +1,12 @@
 import { afterAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import { string } from '../../schemas/index.ts';
-import { cache2Async } from './cache2Async.ts';
+import { cacheAsync } from './cacheAsync.ts';
 
-describe('cache2Async', () => {
+describe('cacheAsync', () => {
   test('should cache output', async () => {
     const baseSchema = string();
     const runSpy = vi.spyOn(baseSchema, '~run');
-    const schema = cache2Async(baseSchema);
+    const schema = cacheAsync(baseSchema);
     expect(await schema['~run']({ value: 'foo' }, {})).toBe(
       await schema['~run']({ value: 'foo' }, {})
     );
@@ -14,7 +14,7 @@ describe('cache2Async', () => {
   });
 
   test('should allow custom max size', async () => {
-    const schema = cache2Async(string(), { maxSize: 2 });
+    const schema = cacheAsync(string(), { maxSize: 2 });
     expect(schema.cacheConfig.maxSize).toBe(2);
 
     const fooDataset = await schema['~run']({ value: 'foo' }, {});
@@ -40,7 +40,7 @@ describe('cache2Async', () => {
     });
 
     test('and clear expired values', async () => {
-      const schema = cache2Async(string(), { maxAge: 1000 });
+      const schema = cacheAsync(string(), { maxAge: 1000 });
       const fooDataset = await schema['~run']({ value: 'foo' }, {});
       expect(await schema['~run']({ value: 'foo' }, {})).toBe(fooDataset);
       vi.advanceTimersByTime(1001);
@@ -48,7 +48,7 @@ describe('cache2Async', () => {
     });
 
     test('and not reset expiry on get', async () => {
-      const schema = cache2Async(string(), { maxAge: 1000 });
+      const schema = cacheAsync(string(), { maxAge: 1000 });
       const fooDataset = await schema['~run']({ value: 'foo' }, {});
       expect(await schema['~run']({ value: 'foo' }, {})).toBe(fooDataset);
       vi.advanceTimersByTime(500);
@@ -59,7 +59,7 @@ describe('cache2Async', () => {
   });
 
   test('should expose cache for manual clearing', async () => {
-    const schema = cache2Async(string());
+    const schema = cacheAsync(string());
     const fooDataset = await schema['~run']({ value: 'foo' }, {});
     expect(await schema['~run']({ value: 'foo' }, {})).toBe(fooDataset);
     schema.cache.clear();
@@ -69,7 +69,7 @@ describe('cache2Async', () => {
   test('should deduplicate concurrent calls', async () => {
     const baseSchema = string();
     const runSpy = vi.spyOn(baseSchema, '~run');
-    const schema = cache2Async(baseSchema);
+    const schema = cacheAsync(baseSchema);
     const p1 = schema['~run']({ value: 'foo' }, {});
     const p2 = schema['~run']({ value: 'foo' }, {});
     const [r1, r2] = await Promise.all([p1, p2]);
@@ -82,7 +82,7 @@ describe('cache2Async', () => {
     vi.spyOn(baseSchema, '~run').mockReturnValueOnce(
       Promise.reject(new Error('test error')) as never
     );
-    const schema = cache2Async(baseSchema);
+    const schema = cacheAsync(baseSchema);
     await expect(schema['~run']({ value: 'foo' }, {})).rejects.toThrow(
       'test error'
     );
@@ -95,7 +95,7 @@ describe('cache2Async', () => {
     const runSpy = vi
       .spyOn(baseSchema, '~run')
       .mockReturnValue(Promise.reject(new Error('test error')) as never);
-    const schema = cache2Async(baseSchema);
+    const schema = cacheAsync(baseSchema);
     const p1 = schema['~run']({ value: 'foo' }, {});
     const p2 = schema['~run']({ value: 'foo' }, {});
     await expect(p1).rejects.toThrow('test error');

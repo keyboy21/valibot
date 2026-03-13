@@ -7,35 +7,34 @@ import type {
   InferOutput,
   OutputDataset,
 } from '../../types/index.ts';
-import type { SchemaWithCache2 } from './cache2.ts';
-import { cache2 } from './cache2.ts';
-import type { Cache2 } from './types.ts';
+import type { SchemaWithCacheAsync } from './cacheAsync.ts';
+import { cacheAsync } from './cacheAsync.ts';
+import type { Cache } from './types.ts';
 
-describe('cache2', () => {
+describe('cacheAsync', () => {
   describe('should return schema object', () => {
     test('without config', () => {
       const schema = string();
-      expectTypeOf(cache2(schema)).toEqualTypeOf<
-        SchemaWithCache2<typeof schema, undefined>
+      expectTypeOf(cacheAsync(schema)).toEqualTypeOf<
+        SchemaWithCacheAsync<typeof schema, undefined>
       >();
-      expectTypeOf(cache2(schema, undefined)).toEqualTypeOf<
-        SchemaWithCache2<typeof schema, undefined>
+      expectTypeOf(cacheAsync(schema, undefined)).toEqualTypeOf<
+        SchemaWithCacheAsync<typeof schema, undefined>
       >();
     });
 
     test('with config', () => {
       const schema = string();
-      expectTypeOf(cache2(schema, { maxSize: 10 })).toMatchTypeOf<
-        SchemaWithCache2<typeof schema, { maxSize: 10 }>
+      expectTypeOf(cacheAsync(schema, { maxSize: 10 })).toMatchTypeOf<
+        SchemaWithCacheAsync<typeof schema, { maxSize: 10 }>
       >();
       expectTypeOf<
-        SchemaWithCache2<typeof schema, { maxSize: 10 }>
-      >().toMatchTypeOf(cache2(schema, { maxSize: 10 }));
+        SchemaWithCacheAsync<typeof schema, { maxSize: 10 }>
+      >().toMatchTypeOf(cacheAsync(schema, { maxSize: 10 }));
     });
   });
-
   describe('should infer correct types', () => {
-    type Schema = SchemaWithCache2<StringSchema<undefined>, undefined>;
+    type Schema = SchemaWithCacheAsync<StringSchema<undefined>, undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Schema>>().toEqualTypeOf<string>();
@@ -51,7 +50,7 @@ describe('cache2', () => {
 
     test('of cache', () => {
       expectTypeOf<Schema['cache']>().toEqualTypeOf<
-        Cache2<OutputDataset<string, StringIssue>>
+        Cache<OutputDataset<string, StringIssue>>
       >();
     });
   });

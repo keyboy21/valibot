@@ -1,7 +1,7 @@
 /**
- * Cache2 interface type.
+ * Cache interface type.
  */
-export interface Cache2<TValue> {
+export interface Cache<TValue> {
   /**
    * Gets a value from the cache by key.
    */
@@ -17,9 +17,9 @@ export interface Cache2<TValue> {
 }
 
 /**
- * Cache2 config type.
+ * Cache config type.
  */
-export interface CacheConfig2 {
+export interface CacheConfig {
   /**
    * The maximum number of items to cache.
    *

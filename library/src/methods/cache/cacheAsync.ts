@@ -12,16 +12,16 @@ import type {
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 import { _LruCache } from './_LruCache.ts';
-import type { Cache2, CacheConfig2 } from './types.ts';
+import type { Cache, CacheConfig } from './types.ts';
 
 /**
- * Schema with cache2 async type.
+ * Schema with cache async type.
  */
-export type SchemaWithCache2Async<
+export type SchemaWithCacheAsync<
   TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  TCacheConfig extends CacheConfig2 | undefined,
+  TCacheConfig extends CacheConfig | undefined,
 > = Omit<TSchema, 'async' | '~standard' | '~run'> & {
   /**
    * Whether it's async.
@@ -36,7 +36,7 @@ export type SchemaWithCache2Async<
   /**
    * The cache instance.
    */
-  readonly cache: Cache2<
+  readonly cache: Cache<
     OutputDataset<InferOutput<TSchema>, InferIssue<TSchema>>
   >;
 
@@ -74,11 +74,11 @@ export type SchemaWithCache2Async<
  * @returns The cached schema.
  */
 // @ts-expect-error
-export function cache2Async<
+export function cacheAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(schema: TSchema): SchemaWithCache2Async<TSchema, undefined>;
+>(schema: TSchema): SchemaWithCacheAsync<TSchema, undefined>;
 
 /**
  * Caches the output of a schema.
@@ -88,26 +88,26 @@ export function cache2Async<
  *
  * @returns The cached schema.
  */
-export function cache2Async<
+export function cacheAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TCacheConfig extends CacheConfig2 | undefined,
+  const TCacheConfig extends CacheConfig | undefined,
 >(
   schema: TSchema,
   config: TCacheConfig
-): SchemaWithCache2Async<TSchema, TCacheConfig>;
+): SchemaWithCacheAsync<TSchema, TCacheConfig>;
 
 // @__NO_SIDE_EFFECTS__
-export function cache2Async(
+export function cacheAsync(
   schema:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  config?: CacheConfig2
-): SchemaWithCache2Async<
+  config?: CacheConfig
+): SchemaWithCacheAsync<
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  CacheConfig2 | undefined
+  CacheConfig | undefined
 > {
   const pending = new Map<
     unknown,
