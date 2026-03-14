@@ -33,6 +33,8 @@ With `jwsCompact` you can validate that a string matches the three-part compact 
 If you are looking for JWT validation, this action covers JWTs that are represented as signed three-part JWS compact strings.
 
 > This validation action only checks the structural format of a JWS compact string. It does not decode the token, verify the signature, or validate individual claims. Unsecured JWTs using `alg: "none"` are allowed and therefore end with a trailing dot.
+>
+> If you need full JWT validation, signature verification, or claim checks, use a dedicated library such as one from [jwt.io/libraries](https://www.jwt.io/libraries).
 
 ## Returns
 
