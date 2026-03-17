@@ -30,7 +30,7 @@ const Schema = v.cache<TSchema, TCacheConfig>(schema, config);
 
 ### Explanation
 
-The `cache` method creates a version of the given `schema` that caches its output. This can be useful for performance optimization, for example when validation involves a network request.
+The `cache` method creates a version of the given `schema` that caches its output. This can be useful for performance optimization, for example when validation performs an expensive computation or complex parsing that you want to avoid repeating for the same input.
 
 > Hint: Primitive inputs are cached by value. Object and function inputs are cached by reference identity, so mutating an input object and reusing the same reference can return a stale cached dataset. For best results, use `cache` with immutable inputs or clear the cache before reusing a mutated reference.
 
